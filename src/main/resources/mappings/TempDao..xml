@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hx.dao.TempDao">
+    <select id="getAllTemp" resultType="com.hx.bean.Temp">
+        select temp_id as tempId,card_id as cardId,car_num as carNum,entry_time as entryTime,out_time as outTime,state,temp_money as tempMoney
+        from temp
+        <where>
+            <if test="keyWorld!=null and keyWorld != ''">
+                car_num like concat("%",#{keyWorld},"%")
+            </if>
+        </where>
+    </select>
+
+    <select id="calculator" resultType="java.lang.Integer">
+        select
+        case when
+        TIMESTAMPDIFF(MINUTE, entry_time, out_time) &lt;=15 and TIMESTAMPDIFF(MINUTE, entry_time, out_time) >= 0 then 0*#{money}
+        when TIMESTAMPDIFF(MINUTE, entry_time, out_time) >15 and TIMESTAMPDIFF(MINUTE, entry_time, out_time) &lt;= 60 then 1*#{money}
+        else  ceiling(TIMESTAMPDIFF(MINUTE, entry_time, out_time)/60)*#{money}
+        end as tempMoney
+        from temp
+        where temp_id = #{tempId}
+    </select>
+
+    <select id="getTempById" resultType="com.hx.bean.Temp">
+        select temp_id as tempId,card_id as cardId,car_num as carNum,entry_time as entryTime,out_time as outTime,state,temp_money as tempMoney
+        from temp where temp_id = #{tempId}
+    </select>
+
+    <select id="updateTemp" resultType="java.lang.Integer" parameterType="com.hx.bean.Temp">
+        update temp
+        <set>
+        temp_id = #{tempId},
+        card_id = #{cardId},
+        car_num = #{carNum},
+        temp_money = #{tempMoney},
+        entry_time = #{entryTime},
+        out_time = #{outTime},
+        state = #[state]
+        </set>
+        where temp_id = #{tempId}
+</select>
+</mapper>

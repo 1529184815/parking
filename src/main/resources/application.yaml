@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/parking
+    password: 991012
+    username: root
+mybatis:
+  mapperLocations: classpath:mappings/*.xml
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  pageSizeZero: false #pageSize=0
+logging:
+  level:
+    com:
+      hx:
+        dao: DEBUG

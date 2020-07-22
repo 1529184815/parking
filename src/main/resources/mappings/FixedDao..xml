@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hx.dao.FixedDao">
+    <resultMap id="fixed" type="com.hx.bean.Fixed">
+        <id column="fixed_id" property="fixedId"></id>
+        <result column="card_id" property="cardId"></result>
+        <result column="start_time" property="startTime"></result>
+        <result column="end_time" property="endTime"></result>
+        <result column="money" property="money"></result>
+        <association property="card" javaType="com.hx.bean.Card">
+            <result column="user_name" property="userName"></result>
+            <result column="car_num" property="carNum"></result>
+        </association>
+    </resultMap>
+    <select id="getAllFixed" resultMap="fixed">
+        select * from fixed f inner join card c on c.card_id = f.card_id
+        <if test="keyWorld != null and keyWorld!='' ">
+            where car_num like concat("%",#{keyWorld},"%")
+        </if>
+    </select>
+
+    <select id="getFixedById" resultType="com.hx.bean.Fixed" parameterType="java.lang.String">
+        select fixed_id as fixedId,card_id as cardId from fixed where fixed_id = #{fixedId}
+    </select>
+
+    <update id="payMoney">
+        update fixed set money = #{money},end_time = date_add(start_time,interval #{money}/300 MONTH) where fixed_id = #{fixedId}
+    </update>
+</mapper>
