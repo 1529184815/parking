@@ -12,6 +12,16 @@ public class Result<T> {
     //返回数据内容
     private T info;
 
+    private String token; //登陆成功生成token
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public Result(Integer status) {
         this.status = status;
     }

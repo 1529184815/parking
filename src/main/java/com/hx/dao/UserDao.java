@@ -18,8 +18,9 @@ public interface UserDao extends Mapper<User> {
             @Result(column = "user_pwd",property = "userPwd"),
             @Result(column = "user_phone",property = "userPhone")
     })
-    @Select("select * from user where user_id=#{userId} and user_pwd=#{userPwd}")
-    User getUser(@Param("userId") String userId, @Param("userPwd") String userPwd);
+    @Select("select * from user where user_id=#{userId}")
+    User getUserByUsername(@Param("userId") String userId);
+
     @Results(id = "users" ,value = {
             @Result(column = "user_id",property = "userId"),
             @Result(column = "role_id",property = "roleId"),
@@ -31,4 +32,11 @@ public interface UserDao extends Mapper<User> {
     })
     @Select("select * from user u inner join role r on u.role_id=r.role_id where user_id like '%${keyWorld}%'")
     List<User> getAllUser(@Param("keyWorld") String keyWorld);
+
+    @Update("update user set user_pwd = #{newPassword} where user_id = #{userId}" )
+    Integer updatePassword(@Param("userId") String userId,@Param("newPassword")String newPassword);
+
+    @ResultMap("user")
+    @Select("select * from user where user_id=#{userId} and user_pwd = #{password}")
+    User getUser(@Param("userId")String username,@Param("password")String password);
 }

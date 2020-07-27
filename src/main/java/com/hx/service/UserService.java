@@ -3,14 +3,11 @@ package com.hx.service;
 import com.github.pagehelper.PageInfo;
 import com.hx.bean.PageParam;
 import com.hx.bean.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface UserService {
-    /**
-     * 登陆
-     */
-    User getUser(String userId, String userPwd);
+public interface UserService extends UserDetailsService {
     /**
      * 添加一个用户
      */
@@ -38,4 +35,6 @@ public interface UserService {
      * @return
      */
     Integer changePwd(User user);
+
+    Integer updatePassword(User user);
 }
